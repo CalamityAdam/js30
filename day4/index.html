@@ -73,32 +73,45 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
-    const oldies = inventors.filter((i) => i.year >= 1500 && i.year < 1600);
-    console.log("oldies: ", oldies);
+    const oldies = inventors.filter(({ year }) => year >= 1500 && year < 1600);
+    console.groupCollapsed("inventors born in the 1500's");
+    console.table(oldies);
+    console.groupEnd();
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
-    const names = inventors.map((i) => `${i.last}, ${i.first}`);
-    console.log("name: ", names);
+    const names = inventors.map(({ first, last }) => `${last}, ${first}`);
+    console.groupCollapsed('Inventors names');
+    console.table(names);
+    console.groupEnd();
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
     const sorted = inventors.sort((a, b) => a.year - b.year);
-    console.log("sorted: ", sorted);
+    console.groupCollapsed('inventors sorted by birthday, oldest to youngest');
+    console.table(sorted);
+    console.groupEnd();
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
     const totalYears = inventors.reduce(
-      (accum, curr) => (accum += curr.passed - curr.year),
+      (accum, { passed, year }) => (accum += passed - year),
       0
     );
-    console.log("total years lived: ", totalYears);
+    console.log("total years lived among inventors: ", totalYears);
 
     // 5. Sort the inventors by years lived
     const sortedByAge = inventors.sort(
       (a, b) => a.passed - a.year - (b.passed - b.year)
     );
-    console.log("sorted by age: ", sortedByAge);
+    const withAge = sortedByAge.map(inventor => ({
+      ...inventor,
+      age: inventor.passed - inventor.year
+    }));
+
+    console.groupCollapsed('inventors sorted by years lived');
+    console.table(withAge);
+    console.groupEnd();
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -141,17 +154,22 @@
     */
 
     // alternatively, visit the link in your browser and paste the following code into the console:
+    /*
     console.log(
       'de boulevards: ',
       [...document.querySelectorAll(".mw-category a")]
         .filter((street) => street.innerText.includes(" de "))
         .map((street) => street.innerText)
     );
+    */
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
     const sortedPeople = people.sort();
-    console.log("sorted people:", sortedPeople);
+
+    console.groupCollapsed('people sorted by last name');
+    console.table(sortedPeople);
+    console.groupEnd();
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
@@ -176,7 +194,10 @@
       else sums[transport] = 1;
       return sums;
     }, {});
-    console.log("transport sums: ", transportSums);
+
+    console.groupCollapsed('transport sums')
+    console.table(transportSums);
+    console.groupEnd();
   </script>
 </body>
 </html>
